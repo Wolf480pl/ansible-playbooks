@@ -1,0 +1,8 @@
+---
+- hosts: localhost
+  vars:
+    vname: t
+  tasks:
+  - set_fact:
+      "test": '{{ {vname: ["foo"] |union(["bar"])} }}'
+  - debug: var=test.t

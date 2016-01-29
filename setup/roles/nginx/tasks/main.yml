@@ -1,0 +1,18 @@
+---
+- name: Install nginx
+#  apt: name=nginx state=present
+  pacman: name=nginx state=present
+
+- name: Copy nginx config
+  copy: src={{ item }} dest=/etc/nginx/ backup=yes
+  with_fileglob:
+    - "*.conf"
+  notify: reload nginx
+
+# FIXME: make this indempotent
+- name: Clear previous managed vhosts
+  file: path=/etc/nginx/ans-sites-enabled state=absent
+  notify: reload nginx
+
+- name: Enable and start nginx
+  service: name=nginx state=started enabled=yes

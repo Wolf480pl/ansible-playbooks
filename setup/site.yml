@@ -1,0 +1,6 @@
+---
+- name: Set up Faris
+#  hosts: faris
+  hosts: localhost
+  roles:
+    - nginx-faris.ijestfajnie.pl

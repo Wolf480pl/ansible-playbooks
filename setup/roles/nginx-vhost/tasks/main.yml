@@ -1,0 +1,11 @@
+---
+- name: Upload {{vhost}} config
+  template: src={{file}} dest=/etc/nginx/ans-sites-available/{{vhost}}
+  notify: reload nginx
+- name: Check for local override of {{vhost}}
+  stat: path=/etc/nginx/sites-enabled/{{ vhost }}
+  register: ovr_link
+- name: Symlinking {{vhost}} config
+  file: path=/etc/nginx/ans-sites-enabled/{{vhost}} state=link src=/etc/nginx/ans-sites-available/{{vhost}}
+  when: not ovr_link.stat.exists
+  notify: reload nginx

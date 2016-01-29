@@ -1,0 +1,6 @@
+- name: "Upload ZNC nginx config"
+  template: src=znc.conf dest=/etc/nginx/ans-fragments/znc
+- name: "Register as part of {{vhost}}"
+  # A giant hack
+  set_fact:
+    nginx_fragments: '{{ {vhost: nginx_fragments[vhost] |default([]) |union(["znc"]) } }}'

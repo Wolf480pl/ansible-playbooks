@@ -1,0 +1,10 @@
+---
+- include: install.yml
+- name: Create znc user
+  user: name=znc comment="Account to run ZNC daemon" home="/var/lib/znc"  system=yes state=present
+
+#- name: Generate default ZNC config
+#  become_user: znc
+#  become: true
+#  command: znc --makeconfig
+
