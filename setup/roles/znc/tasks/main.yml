@@ -1,5 +1,12 @@
 ---
+- name: Find the installed version of ZNC
+  shell: '/usr/local/bin/znc --version | grep -Poh "^ZNC \K([0-9.]+)"'
+  ignore_errors: yes
+  register: znc_installed_version
+
 - include: install.yml
+  when: (znc_installed_version.rc != 0) or (znc_version | version_compare(znc_installed_version.stdout, "!="))
+
 - name: Create znc user
   user: name=znc comment="Account to run ZNC daemon" home="/var/lib/znc"  system=yes state=present
 

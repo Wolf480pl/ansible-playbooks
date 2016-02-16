@@ -1,0 +1,24 @@
+---
+- name: Download ZNC source tarball
+  get_url: url=http://znc.in/releases/archive/znc-{{ znc_version }}.tar.gz dest=. checksum=sha256:df622aeae34d26193c738dff6499e56ad669ec654484e19623738d84cc80aba7
+
+- name: Extract ZNC source tarball
+  unarchive: src=znc-{{ znc_version }}.tar.gz copy=no dest=.
+  
+- name: Configure ZNC compilation
+  command: ./configure --enable-python={{ znc_python }}
+  args:
+    chdir: znc-{{ znc_version }}
+    creates: znc-{{ znc_version }}/Makefile
+
+- name: Compile ZNC
+  command: make
+  args:
+    chdir: znc-{{ znc_version }}
+    creates: znc-{{ znc_version }}/znc
+
+- name: Install ZNC
+  command: make install
+  args:
+    chdir: znc-{{ znc_version }}
+  become: true
