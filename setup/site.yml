@@ -4,3 +4,4 @@
   hosts: localhost
   roles:
     - nginx-faris.ijestfajnie.pl
+    - nginx-wolf480.pl
