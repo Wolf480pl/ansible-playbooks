@@ -10,8 +10,18 @@
 - name: Create znc user
   user: name=znc comment="Account to run ZNC daemon" home="/var/lib/znc"  system=yes state=present
 
-#- name: Generate default ZNC config
-#  become_user: znc
-#  become: true
-#  command: znc --makeconfig
+- name: Generate password salt
+  set_fact:
+    znc_salt: "{{ 20 |znc_random }}"
 
+- name: Upload ZNC config
+  template: src=znc.conf dest=/var/lib/znc/configs/znc.conf
+  become_user: znc
+  become: true
+
+- name: Upload ZNC initscript
+  copy: src=znc.init dest=/etc/init.d/znc
+  when: ansible_service_mgr != "systemd"
+
+- name: Enable and start ZNC
+  service: name=znc state=started enabled=yes
