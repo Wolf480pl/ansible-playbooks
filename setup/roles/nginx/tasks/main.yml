@@ -3,7 +3,7 @@
 #  apt: name=nginx state=present
   pacman: name=nginx state=present
 
-- name: Copy nginx config
+- name: Upload nginx config
   copy: src={{ item }} dest=/etc/nginx/ backup=yes
   with_fileglob:
     - "*.conf"
