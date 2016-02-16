@@ -1,1 +1,3 @@
 file: vhost.conf
+vhost_file: composite-vhost.conf
+alt_hosts: []

@@ -1,4 +1,4 @@
 ---
 dependencies:
 - { role: nginx-znc, vhost: faris.ijestfajnie.pl }
-- { role: nginx-vhost, vhost: faris.ijestfajnie.pl, vhost_file: roles/nginx-faris.ijestfajnie.pl/templates/faris.conf }
+- { role: nginx-vhost, vhost: faris.ijestfajnie.pl, alt_hosts: [znc.wolf480.pl] }
