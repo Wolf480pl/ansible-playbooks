@@ -14,5 +14,13 @@
   file: path=/etc/nginx/ans-sites-enabled state=absent
   notify: reload nginx
 
+- name: Make managed vhost directory
+  file: path=/etc/nginx/{{item}} state=directory
+  with_items:
+    - ans-sites-enabled
+    - ans-sites-available
+    - ans-fragments
+  notify: reload nginx
+
 - name: Enable and start nginx
   service: name=nginx state=started enabled=yes
