@@ -1,7 +1,7 @@
 ---
 - name: Install nginx
-#  apt: name=nginx state=present
-  pacman: name=nginx state=present
+  apt: name=nginx state=latest default_release=jessie-backports
+#  pacman: name=nginx state=present
 
 - name: Upload nginx config
   copy: src={{ item }} dest=/etc/nginx/ backup=yes
