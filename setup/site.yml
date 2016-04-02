@@ -1,8 +1,8 @@
 ---
 - name: Set up Faris
-#  hosts: faris
-  hosts: localhost
+  hosts: faris
+#  hosts: localhost
   roles:
     - nginx-faris.ijestfajnie.pl
     - nginx-wolf480.pl
-    - znc
+#    - znc
