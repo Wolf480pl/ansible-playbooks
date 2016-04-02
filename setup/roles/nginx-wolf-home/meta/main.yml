@@ -1,0 +1,3 @@
+---
+dependencies:
+ - {role: nginx-static, name: wolf-home, url_path: /w/, webroot_path: /home/wolf480/www/}

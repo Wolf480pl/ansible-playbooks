@@ -1,4 +1,5 @@
 ---
 dependencies:
 - { role: nginx-wolf-landing, vhost: wolf480.pl }
+- { role: nginx-wolf-home, vhost: wolf480.pl }
 - { role: nginx-vhost, vhost: wolf480.pl }
