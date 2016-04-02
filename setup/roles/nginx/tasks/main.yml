@@ -22,5 +22,14 @@
     - ans-fragments
   notify: reload nginx
 
+- name: Create the acme group
+  group: name=acme system=yes state=present
+
+- name: Create the acme-challenge parent directory
+  file: path=/srv/acme/.well-known state=directory
+
+- name: Create the acme-challenge directory
+  file: path=/srv/acme/.well-known/acme-challenge state=directory group=acme mode=775
+
 - name: Enable and start nginx
   service: name=nginx state=started enabled=yes
