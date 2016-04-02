@@ -1,0 +1,8 @@
+---
+- name: "Upload {{name}} nginx config"
+  template: src={{fragment_file}} dest=/etc/nginx/ans-fragments/{{name}}
+
+- name: "Register as part of {{vhost}}"
+  # A giant hack
+  set_fact:
+    nginx_fragments: '{{ {vhost: nginx_fragments[vhost] |default([]) |union([name]) } }}'

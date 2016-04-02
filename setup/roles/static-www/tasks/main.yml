@@ -1,0 +1,6 @@
+---
+- name: Create www-admin user
+  user: name=www-admin comment="Static WWW owner" home="/" system=yes state=present
+
+- name: Create /srv
+  file: path=/srv state=directory

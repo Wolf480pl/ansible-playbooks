@@ -1,0 +1,4 @@
+---
+dependencies:
+ - {role: nginx-static, name: wolf-landing, url_path: /, webroot_path: /srv/wolf480.pl/}
+ - static-www

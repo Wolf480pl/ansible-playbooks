@@ -1,6 +1,3 @@
-- name: "Upload landing page nginx config"
-  template: src=landing.conf dest=/etc/nginx/ans-fragments/wolf-landing
-- name: "Register as part of {{vhost}}"
-  # A giant hack
-  set_fact:
-    nginx_fragments: '{{ {vhost: nginx_fragments[vhost] |default([]) |union(["wolf-landing"]) } }}'
+- name: "Fetch landing page content"
+#  unarchive: src=https://github.com/Wolf480pl/static/raw/master/wolf480.pl.tar.gz copy=no dest=/srv/ owner=www-admin group=www-admin
+  unarchive: src=wolf480.pl.tar.gz dest=/srv/ owner=www-admin group=www-admin

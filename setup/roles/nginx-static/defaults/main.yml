@@ -1,0 +1,4 @@
+---
+fragment_file: static.conf
+url_path: /
+webroot_path: /srv/{{name}}
