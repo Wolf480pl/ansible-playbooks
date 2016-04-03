@@ -1,0 +1,55 @@
+---
+#- name: Set permissions on ZNC private
+#  file: path=/var/lib/znc/znc.key state=touch mode=600
+#  become_user: znc
+#  become: true
+
+- name: Generate TLS private key for ZNC
+  shell: umask 077 && openssl genrsa -out znc.key 2048
+  args:
+    chdir:  /var/lib/znc/
+    creates: znc.key
+  become_user: znc
+  become: true
+  notify: build znc.pem
+
+- name: Copy original openssl.cnf
+  copy: src=/etc/ssl/openssl.cnf dest=/var/lib/znc/openssl.cnf remote_src=true 
+  become_user: znc
+  become: true
+
+- name: Upload openssl.cnf.patch for ZNC
+  template: src=openssl.cnf.patch dest=/var/lib/znc/openssl.cnf.patch
+  become_user: znc
+  become: true
+
+- name: Patch openssl.cnf for ZNC certs
+  patch: src=/var/lib/znc/openssl.cnf.patch basedir=/var/lib/znc/ remote_src=yes
+  become_user: znc
+  become: true
+
+- name: Generate CSR for the ZNC key
+  command: openssl req -new -key znc.key -config openssl.cnf -subj "/CN=faris.wolf480.pl" -out znc.csr
+  args:
+    chdir:  /var/lib/znc/
+    creates: znc.csr
+  become_user: znc
+  become: true
+
+- name: Generate a self-signed TLS certificate for ZNC
+  command: openssl x509 -req -in znc.csr -signkey znc.key -days 720 -out znc.crt
+  args:
+    chdir:  /var/lib/znc/
+    creates: znc.crt
+  become_user: znc
+  become: true
+  notify: build znc.pem
+
+- name: Generate DH params for ZNC
+  command: openssl dhparam -out dhparam.pem 2048
+  args:
+    chdir:  /var/lib/znc/
+    creates: dhparam.pem
+  become_user: znc
+  become: true
+  notify: build znc.pem

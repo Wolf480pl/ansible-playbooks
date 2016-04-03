@@ -1,0 +1,15 @@
+---
+- name: reload systemd
+  command: systemctl daemon-reload
+  become: true
+
+- name: build znc.pem
+  shell: umask 077 && cat znc.key znc.crt dhparam.pem >znc.pem
+  args:
+    chdir: /var/lib/znc/
+  become_user: znc
+  become: true 
+
+- name: reload znc
+  service: name=znc state=restarted
+  become: true

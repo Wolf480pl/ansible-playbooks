@@ -1,27 +1,44 @@
 ---
 - name: Find the installed version of ZNC
-  shell: '/usr/local/bin/znc --version | grep -Poh "^ZNC \K([0-9.]+)"'
+  shell: 'znc --version | grep -Poh "^ZNC \K([0-9.]+)"'
   ignore_errors: yes
   register: znc_installed_version
 
 - include: install.yml
-  when: (znc_installed_version.rc != 0) or (znc_version | version_compare(znc_installed_version.stdout, "!="))
+  when: (znc_installed_version.rc != 0) or (znc_version | version_compare(znc_installed_version.stdout, ">"))
 
 - name: Create znc user
   user: name=znc comment="Account to run ZNC daemon" home="/var/lib/znc"  system=yes state=present
+  become: true
 
 - name: Generate password salt
   set_fact:
     znc_salt: "{{ 20 |znc_random }}"
 
-- name: Upload ZNC config
-  template: src=znc.conf dest=/var/lib/znc/configs/znc.conf
+- name: Create ZNC config dir
+  file: path=/var/lib/znc/configs state=directory mode=700
   become_user: znc
   become: true
 
 - name: Upload ZNC initscript
   copy: src=znc.init dest=/etc/init.d/znc
   when: ansible_service_mgr != "systemd"
+  become: true
+
+- name: Upload ZNC systemd unit
+  copy: src=znc.service dest=/etc/systemd/system/znc.service
+  when: ansible_service_mgr == "systemd"
+  become: true
+  notify: reload systemd
+
+- name: Upload ZNC config
+  template: src=znc.conf dest=/var/lib/znc/configs/znc.conf
+  become_user: znc
+  become: true
+  notify: reload znc
+
+- include: keygen.yml
 
 - name: Enable and start ZNC
   service: name=znc state=started enabled=yes
+  become: true

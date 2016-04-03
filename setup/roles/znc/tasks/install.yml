@@ -1,7 +1,13 @@
 ---
 - name: Install ZNC from repositories
-  package: name=znc state=present
-  when: (znc_from_repo = "always") or (znc_version |version_compare(znc_from_repo, "<="))
+#  package: name={{item}} state=present
+  apt: name={{ item }} state=latest default_release=jessie-backports
+  with_items:
+    - znc
+    - znc-python
+  when: (znc_from_repo == "always") or (znc_version |version_compare(znc_from_repo, "<="))
+  become: true
+
 
 - include: install_from_src.yml
-  when: (znc_from_repo != "always") and (znc_version |version_compare(znc_from_repo, ">")
+  when: (znc_from_repo != "always") and (znc_version |version_compare(znc_from_repo, ">"))

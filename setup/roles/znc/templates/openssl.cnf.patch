@@ -1,0 +1,27 @@
+--- openssl.cnf	2016-01-07 21:16:43.000000000 +0100
++++ openssl.cnf	2016-02-28 19:21:10.132612000 +0100
+@@ -122,7 +122,7 @@
+ # WARNING: ancient versions of Netscape crash on BMPStrings or UTF8Strings.
+ string_mask = utf8only
+ 
+-# req_extensions = v3_req # The extensions to add to a certificate request
++req_extensions = v3_req # The extensions to add to a certificate request
+ 
+ [ req_distinguished_name ]
+ countryName			= Country Name (2 letter code)
+@@ -219,7 +219,14 @@
+ # Extensions to add to a certificate request
+ 
+ basicConstraints = CA:FALSE
+-keyUsage = nonRepudiation, digitalSignature, keyEncipherment
++keyUsage = digitalSignature, keyEncipherment
++
++subjectAltName = @alt_names
++
++[alt_names]
++
++DNS.1 = faris.ijestfajnie.pl
++DNS.2 = znc.wolf480.pl
+ 
+ [ v3_ca ]
+ 
