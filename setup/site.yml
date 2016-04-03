@@ -3,6 +3,6 @@
   hosts: faris
 #  hosts: localhost
   roles:
-    - nginx-faris.ijestfajnie.pl
-    - nginx-wolf480.pl
+    - {role: nginx-faris.ijestfajnie.pl, become: true}
+    - {role: nginx-wolf480.pl, become: true}
 #    - znc
