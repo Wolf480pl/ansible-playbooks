@@ -1,0 +1,7 @@
+---
+- name: Set up FxSync on Faris
+  hosts: faris
+  vars:
+    fxsync_url: https://wolf.ijestfajnie.pl{{fxsync_url_path}}
+  roles:
+    - fxsync
