@@ -2,7 +2,11 @@
 - name: Set up Faris
   hosts: faris
 #  hosts: localhost
+  vars:
+    fxsync_url: https://wolf.ijestfajnie.pl{{fxsync_url_path}}
   roles:
     - {role: nginx-faris.ijestfajnie.pl, become: true}
     - {role: nginx-wolf480.pl, become: true}
+    - {role: nginx-wolf.ijestfajnie.pl, become: true}
 #    - znc
+    - fxsync
