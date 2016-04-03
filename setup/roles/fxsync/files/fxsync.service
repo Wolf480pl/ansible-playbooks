@@ -1,0 +1,13 @@
+[Unit]
+Description=Firefox Sync server
+After=network.target
+
+[Service]
+Type=simple
+User=fxsync
+Umask=007
+
+ExecStart=/opt/fxsync/local/bin/gunicorn --paste /etc/fxsync.ini
+
+[Install]
+WantedBy=multi-user.target

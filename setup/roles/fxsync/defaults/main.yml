@@ -1,0 +1,4 @@
+---
+fxsync_host: 127.0.0.1
+fxsync_port: 5000
+fxsync_allow_new_users: false

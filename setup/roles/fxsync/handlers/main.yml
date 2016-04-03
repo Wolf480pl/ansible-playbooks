@@ -1,0 +1,8 @@
+---
+- name: reload systemd
+  command: systemctl daemon-reload
+  become: true
+
+- name: reload fxsync
+  service: name=fxsync state=restarted
+  become: true

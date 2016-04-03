@@ -1,0 +1,25 @@
+diff --git a/Makefile b/Makefile
+index 2efa163..5c87283 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,6 +1,6 @@
+ SYSTEMPYTHON = `which python2 python | head -n 1`
+ VIRTUALENV = virtualenv --python=$(SYSTEMPYTHON)
+-ENV = ./local
++ENV = /opt/fxsync
+ TOOLS := $(addprefix $(ENV)/bin/,flake8 nosetests)
+ 
+ # Hackety-hack around OSX system python bustage.
+@@ -18,10 +18,10 @@ all: build
+ 
+ .PHONY: build
+ build: | $(ENV)/COMPLETE
+-$(ENV)/COMPLETE: requirements.txt
++$(ENV)/COMPLETE: requirements.txt syncserver/*.py
+ 	$(VIRTUALENV) --no-site-packages $(ENV)
+ 	$(INSTALL) -r requirements.txt
+-	$(ENV)/bin/python ./setup.py develop
++	$(ENV)/bin/python ./setup.py install
+ 	touch $(ENV)/COMPLETE
+ 
+ .PHONY: test

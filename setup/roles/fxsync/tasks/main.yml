@@ -1,0 +1,48 @@
+---
+- name: Install Firefox Sync dependencies
+  package: name={{item}} state=present
+  with_items:
+    - python-dev
+    - python-virtualenv
+    - git
+    - make
+    - g++
+  become: true
+
+- name: Fetch Firefox Sync server from git
+  git: repo=https://github.com/mozilla-services/syncserver depth=1 force=yes dest=/tmp/syncserver
+
+- name: Patch Firefox Sync Makefile
+  patch: src=Makefile.patch basedir=/tmp/syncserver strip=1
+
+- name: Build Firefox Sync virtualenv
+#  command: make build
+  make: target=build
+  args:
+    chdir: /tmp/syncserver
+  become: true
+
+- name: Create fxsync user
+  user: name=fxsync comment="Account to run Firefox Sync server" home="/var/lib/fxsync" system=yes state=present home=/var/lib/fxsync
+  become: true
+
+- name: Upload Firefox Sync systemd unit
+  copy: src=fxsync.service dest=/etc/systemd/system/fxsync.service
+  when: ansible_service_mgr == "systemd"
+  become: true
+  notify: reload systemd
+
+# TODO: sysvinit.... (/run, /var/log, /etc/init.d)
+
+- name: Upload Firefox Sync config
+  template: src=syncserver.ini dest=/etc/fxsync.ini mode=640 group=fxsync
+  become: true
+  notify: reload fxsync
+
+- name: Create /var/lib/fxsync
+  file: path=/var/lib/fxsync state=directory owner=fxsync
+  become: true
+
+- name: Enable and start Firefox Sync
+  service: name=fxsync state=started enabled=yes
+  become: true
