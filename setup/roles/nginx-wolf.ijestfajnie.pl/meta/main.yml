@@ -1,6 +1,5 @@
 ---
 dependencies:
-- nginx
 - { role: nginx-fxsync, vhost: wolf.ijestfajnie.pl, fxsync_url_path: /fxsync }
 - { role: nginx-wolf-home, vhost: wolf.ijestfajnie.pl }
 - { role: nginx-vhost, vhost: wolf.ijestfajnie.pl, alt_hosts: [ "*.ijestfajnie.pl" ] }
