@@ -1,4 +1,4 @@
 - name: "Register as part of {{vhost}}"
   # A giant hack
   set_fact:
-    nginx_fragments: '{{ {vhost: nginx_fragments[vhost] |default([]) |union([name]) } }}'
+    nginx_fragments: '{{ {vhost: nginx_fragments[vhost] |default([]) |union(["wolf-home"]) } }}'
